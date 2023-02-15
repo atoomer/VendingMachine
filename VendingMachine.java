@@ -29,11 +29,13 @@ public class VendingMachine {
         int userSelection = scan.nextInt();
         if (userSelection == 0) {
             System.out.println("Transaction Cancelled. Goodbye!");
+            System.out.println("Here is your refund of $" + String.format("%.2f" , (double)credit)+".");
             System.exit(0);
         }
         while (!validSelections.contains(userSelection)) {
             if (userSelection == snacks.length + 1) {
                 System.out.println("Transaction Cancelled. Goodbye!");
+                System.out.println("Here is your refund of $" + String.format("%.2f" , (double)credit)+".");
                 System.exit(0);
             }
             else if (userSelection < 1 || userSelection > snacks.length) {
@@ -49,6 +51,7 @@ public class VendingMachine {
                 }
                 else{
                     System.out.println("Transaction Cancelled. Goodbye!");
+                    System.out.println("Here is your refund of $" + String.format("%.2f" , (double)credit)+".");
                     System.exit(0);
                 }
             }
