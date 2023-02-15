@@ -1,6 +1,8 @@
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
+
+import javax.lang.model.util.ElementScanner14;
 public class VendingMachine {
     public static void main(String[]args)
     {
@@ -11,7 +13,7 @@ public class VendingMachine {
         Scanner scan = new Scanner(System.in);
         System.out.println("Please insert money. This machine only accepts $1 bills");
         int credit = scan.nextInt();
-        System.out.println("$"+credit+" in credit available.");
+        System.out.println("$"+String.format("%.2f", (double)credit)+" in credit available.");
         System.out.println("Please make your selection: ");
         
         Set<Integer> validSelections = new HashSet<>();
@@ -22,23 +24,46 @@ public class VendingMachine {
                 validSelections.add(i + 1);
             }
         }
-        System.out.println((snacks.length + 1) + ") Quit");
+        System.out.println("0) Quit");
         System.out.println("What is your selection?");
         int userSelection = scan.nextInt();
-        if (userSelection == snacks.length + 1) {
-            System.out.println("Goodbye!");
+        if (userSelection == 0) {
+            System.out.println("Transaction Cancelled. Goodbye!");
             System.exit(0);
         }
         while (!validSelections.contains(userSelection)) {
-            if (userSelection < 1 || userSelection > snacks.length) {
+            if (userSelection == snacks.length + 1) {
+                System.out.println("Transaction Cancelled. Goodbye!");
+                System.exit(0);
+            }
+            else if (userSelection < 1 || userSelection > snacks.length) {
                 System.out.println("That selection is invalid -- please enter a valid selection");
             }
             else if (prices[userSelection - 1] > credit) {
-                System.out.println("You do not have enough credit available for this selection -- please try again");
+                System.out.println("You do not have enough credit available for this selection.");
+                System.out.println("If you still want to choose this snack, insert more money now. Otherwise, type '0' to cancel transaction.");
+                double addCredit = scan.nextDouble();
+                if (addCredit > 0){
+                    credit += addCredit;
+                    System.out.println("Added $" + String.format("%.2f", addCredit)+".\nTotal credit is $" + String.format("%.2f" , (double)credit)+".");
+                }
+                else{
+                    System.out.println("Transaction Cancelled. Goodbye!");
+                    System.exit(0);
+                }
             }
-            userSelection = scan.nextInt();
-        } 
-        
-    }
-    
+            else if (credit > prices[userSelection - 1]){
+                System.out.println("You have picked "+snacks[userSelection - 1]+".");
+                double change = credit - prices[userSelection - 1];
+                System.out.println("Don't forget your change of $"+ String.format("%.2f", change)+".\nThanks for using this vending machine!");
+                System.exit(0);
+            }
+        }      
+        System.out.println("You have picked "+snacks[userSelection - 1]+".");
+        double change = credit - prices[userSelection - 1];
+        System.out.println("Don't forget your change of $"+ String.format("%.2f", change)+".\nThanks for using this vending machine!");
+        scan.close();
+    }  
 }
+    
+
